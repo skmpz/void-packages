@@ -1,16 +1,17 @@
 # Template file for 'libgcrypt'
 pkgname=libgcrypt
-version=1.10.3
+version=1.11.0
 revision=1
 build_style=gnu-configure
 configure_args="--enable-static --without-capabilities"
 makedepends="libgpg-error-devel"
 short_desc="GNU cryptographic library"
 maintainer="skmpz <dem.procopiou@gmail.com>"
-license="LGPL-2.1-or-later"
+license="BSD-3-Clause AND (BSD-3-Clause OR GPL-2.0-only) AND GPL-2.0-or-later
+ AND LGPL-2.1-or-later AND LGPL-2.0-or-later AND MIT-Modern-Variant"
 homepage="https://www.gnupg.org"
 distfiles="https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-${version}.tar.bz2"
-checksum=8b0870897ac5ac67ded568dcfadf45969cfa8a6beb0fd60af2a9eadc2a3272aa
+checksum=09120c9867ce7f2081d6aaa1775386b98c2f2f246135761aae47d81f58685b9c
 
 if [ "$CROSS_BUILD" ]; then
 	configure_args+=" ac_cv_sys_symbol_underscore=no"
@@ -29,6 +30,10 @@ post_configure() {
 	esac
 }
 
+post_install() {
+	vlicense LICENSES
+}
+
 libgcrypt-devel_package() {
 	depends="${makedepends} ${sourcepkg}-${version}_${revision}"
 	short_desc+=" - development files"
@@ -36,7 +41,7 @@ libgcrypt-devel_package() {
 		vmove usr/bin/libgcrypt-config
 		vmove usr/include
 		vmove usr/lib/pkgconfig
-		vmove usr/share
+		vmove usr/share/aclocal
 		vmove "usr/lib/*.so"
 		vmove "usr/lib/*.a"
 	}
